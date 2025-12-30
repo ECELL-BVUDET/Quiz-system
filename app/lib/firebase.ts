@@ -3,12 +3,12 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAyLgff2xhAorpLpinrHtqGW_t0qpfcXkw",
-  authDomain: "quiz-website-3b5d6.firebaseapp.com",
-  projectId: "quiz-website-3b5d6",
-  storageBucket: "quiz-website-3b5d6.firebasestorage.app",
-  messagingSenderId: "288945214262",
-  appId: "1:288945214262:web:cc9e2f0e3b7e5259739997"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 // Initialize Firebase (singleton pattern)
