@@ -114,7 +114,7 @@ export default function AnalyticsPage() {
     };
 
     return (
-        <div className="max-w-7xl mx-auto px-8 py-12">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12 overflow-x-hidden">
             <button
                 onClick={() => router.push('/admin')}
                 className="mb-8 flex items-center gap-2 font-bold hover:underline"
@@ -122,9 +122,9 @@ export default function AnalyticsPage() {
                 <ArrowLeft className="w-4 h-4" /> Back to Dashboard
             </button>
 
-            <div className="border-b-4 border-foreground pb-8 mb-12">
-                <h1 className="text-4xl font-black mb-2 uppercase">{quiz.title}</h1>
-                <p className="font-mono text-gray-500">ANALYTICS & LEADERBOARD</p>
+            <div className="border-b-4 border-foreground pb-6 mb-8 md:pb-8 md:mb-12">
+                <h1 className="text-2xl md:text-4xl font-black mb-2 uppercase break-words">{quiz.title}</h1>
+                <p className="font-mono text-sm md:text-base text-gray-500">ANALYTICS & LEADERBOARD</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -201,88 +201,90 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Leaderboard Table */}
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-3xl font-black flex items-center gap-3">
-                    <Award className="w-8 h-8 text-primary" />
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                <h2 className="text-2xl md:text-3xl font-black flex items-center gap-3">
+                    <Award className="w-6 h-6 md:w-8 md:h-8 text-primary" />
                     LEADERBOARD
                 </h2>
                 <button
                     onClick={downloadCSV}
-                    className="flex items-center gap-2 border-2 border-foreground px-4 py-2 font-bold bg-primary text-foreground hover:bg-foreground hover:text-background transition-colors"
+                    className="flex items-center justify-center gap-2 border-2 border-foreground px-4 py-2 font-bold bg-primary text-foreground hover:bg-foreground hover:text-background transition-colors w-full sm:w-auto"
                 >
                     <Download className="w-5 h-5" />
                     EXPORT CSV
                 </button>
             </div>
-            <div className="border-4 border-foreground overflow-hidden bg-background shadow-[8px_8px_0px_0px_#3D5A5B]">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-foreground text-background">
-                        <tr>
-                            <th className="p-4 font-bold border-r border-gray-500 w-16">#</th>
-                            <th className="p-4 font-bold border-r border-gray-500">STUDENT</th>
-                            <th className="p-4 font-bold border-r border-gray-500">EMAIL</th>
-                            <th className="p-4 font-bold border-r border-gray-500 text-center">SCORE</th>
-                            <th className="p-4 font-bold border-r border-gray-500 text-center">RESULT</th>
-                            <th className="p-4 font-bold border-r border-gray-500 text-center">START (IST)</th>
-                            <th className="p-4 font-bold text-center">END (IST)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {submissions.map((sub, idx) => (
-                            <tr key={idx} className="border-b-2 border-gray-100 hover:bg-yellow-50 transition-colors">
-                                <td className="p-4 font-black text-xl border-r-2 border-gray-100 text-center text-gray-400">
-                                    {idx + 1}
-                                </td>
-                                <td className="p-4 font-bold border-r-2 border-gray-100 flex items-center gap-2">
-                                    {idx === 0 && <Award className="w-5 h-5 text-yellow-500" />}
-                                    {idx === 1 && <Award className="w-5 h-5 text-gray-400" />}
-                                    {idx === 2 && <Award className="w-5 h-5 text-orange-700" />}
-                                    {sub.userName || 'Anonymous'}
-                                </td>
-                                <td className="p-4 font-mono text-sm text-gray-600 border-r-2 border-gray-100">
-                                    {sub.userEmail || 'No Email'}
-                                </td>
-                                <td className="p-4 font-black text-center text-lg border-r-2 border-gray-100">
-                                    {sub.status === 'completed' ? (
-                                        <>
-                                            <span className={sub.score === quiz.questions.length ? 'text-green-600' : ''}>
-                                                {sub.score}
-                                            </span>
-                                            <span className="text-gray-400 text-sm"> / {quiz.questions.length}</span>
-                                        </>
-                                    ) : (
-                                        <span className="text-gray-400 text-sm italic">Pending</span>
-                                    )}
-                                </td>
-                                <td className={`p-4 font-bold text-center border-r-2 border-gray-100 ${sub.status === 'completed' ? 'text-green-600' : 'text-orange-500'}`}>
-                                    {sub.status === 'completed' ? 'COMPLETED' : `Q${(sub.lastQuestionIndex || 0) + 1} / ${quiz.questions.length}`}
-                                </td>
-                                <td className="p-4 font-mono text-center text-sm border-r-2 border-gray-100">
-                                    {sub.startedAt
-                                        ? new Date(sub.startedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })
-                                        : '-'}
-                                </td>
-                                <td className="p-4 font-mono text-center text-sm flex flex-col items-center">
-                                    {sub.status === 'completed' && sub.completedAt ? (
-                                        <>
-                                            <span>{new Date(sub.completedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })}</span>
-                                            <span className="text-xs text-gray-400">({formatTime(sub.timeTaken)})</span>
-                                        </>
-                                    ) : (
-                                        <span className="text-orange-400 text-xs font-bold uppercase tracking-wider">In Progress</span>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                        {submissions.length === 0 && (
+            <div className="border-4 border-foreground bg-background shadow-[8px_8px_0px_0px_#3D5A5B] flex flex-col">
+                <div className="overflow-x-auto w-full">
+                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                        <thead className="bg-foreground text-background">
                             <tr>
-                                <td colSpan={5} className="p-8 text-center text-gray-500 italic">
-                                    No submissions yet.
-                                </td>
+                                <th className="p-4 font-bold border-r border-gray-500 w-16 sticky left-0 bg-foreground z-10">#</th>
+                                <th className="p-4 font-bold border-r border-gray-500 sticky left-16 bg-foreground z-10">STUDENT</th>
+                                <th className="p-4 font-bold border-r border-gray-500">EMAIL</th>
+                                <th className="p-4 font-bold border-r border-gray-500 text-center">SCORE</th>
+                                <th className="p-4 font-bold border-r border-gray-500 text-center">RESULT</th>
+                                <th className="p-4 font-bold border-r border-gray-500 text-center">START (IST)</th>
+                                <th className="p-4 font-bold text-center">END (IST)</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {submissions.map((sub, idx) => (
+                                <tr key={idx} className="border-b-2 border-gray-100 hover:bg-yellow-50 transition-colors group">
+                                    <td className="p-4 font-black text-xl border-r-2 border-gray-100 text-center text-gray-400 sticky left-0 bg-background group-hover:bg-yellow-50 z-10 border-r-foreground/10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                                        {idx + 1}
+                                    </td>
+                                    <td className="p-4 font-bold border-r-2 border-gray-100 flex items-center gap-2 sticky left-16 bg-background group-hover:bg-yellow-50 z-10 border-r-foreground/10 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
+                                        {idx === 0 && <Award className="w-5 h-5 text-yellow-500 shrink-0" />}
+                                        {idx === 1 && <Award className="w-5 h-5 text-gray-400 shrink-0" />}
+                                        {idx === 2 && <Award className="w-5 h-5 text-orange-700 shrink-0" />}
+                                        <span className="truncate max-w-[150px]">{sub.userName || 'Anonymous'}</span>
+                                    </td>
+                                    <td className="p-4 font-mono text-sm text-gray-600 border-r-2 border-gray-100">
+                                        {sub.userEmail || 'No Email'}
+                                    </td>
+                                    <td className="p-4 font-black text-center text-lg border-r-2 border-gray-100">
+                                        {sub.status === 'completed' ? (
+                                            <>
+                                                <span className={sub.score === quiz.questions.length ? 'text-green-600' : ''}>
+                                                    {sub.score}
+                                                </span>
+                                                <span className="text-gray-400 text-sm"> / {quiz.questions.length}</span>
+                                            </>
+                                        ) : (
+                                            <span className="text-gray-400 text-sm italic">Pending</span>
+                                        )}
+                                    </td>
+                                    <td className={`p-4 font-bold text-center border-r-2 border-gray-100 ${sub.status === 'completed' ? 'text-green-600' : 'text-orange-500'}`}>
+                                        {sub.status === 'completed' ? 'COMPLETED' : `Q${(sub.lastQuestionIndex || 0) + 1} / ${quiz.questions.length}`}
+                                    </td>
+                                    <td className="p-4 font-mono text-center text-sm border-r-2 border-gray-100 whitespace-nowrap">
+                                        {sub.startedAt
+                                            ? new Date(sub.startedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })
+                                            : '-'}
+                                    </td>
+                                    <td className="p-4 font-mono text-center text-sm flex flex-col items-center whitespace-nowrap">
+                                        {sub.status === 'completed' && sub.completedAt ? (
+                                            <>
+                                                <span>{new Date(sub.completedAt).toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit' })}</span>
+                                                <span className="text-xs text-gray-400">({formatTime(sub.timeTaken)})</span>
+                                            </>
+                                        ) : (
+                                            <span className="text-orange-400 text-xs font-bold uppercase tracking-wider">In Progress</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                            {submissions.length === 0 && (
+                                <tr>
+                                    <td colSpan={7} className="p-8 text-center text-gray-500 italic">
+                                        No submissions yet.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
