@@ -5,11 +5,31 @@ import { useQuizzes } from './context/QuizContext';
 import QuizCard from './components/QuizCard';
 
 export default function Home() {
-  const { quizzes } = useQuizzes();
+  const { quizzes: contextQuizzes } = useQuizzes();
+  const [quizzes, setQuizzes] = React.useState<typeof contextQuizzes>([]);
+
+  React.useEffect(() => {
+    // Load from cache initially
+    const cached = localStorage.getItem('home_quizzes_cache');
+    if (cached) {
+      try {
+        setQuizzes(JSON.parse(cached));
+      } catch (e) {
+        console.error("Error parsing quiz cache", e);
+      }
+    }
+  }, []);
+
+  React.useEffect(() => {
+    // Update when context provides data
+    if (contextQuizzes.length > 0) {
+      setQuizzes(contextQuizzes);
+      localStorage.setItem('home_quizzes_cache', JSON.stringify(contextQuizzes));
+    }
+  }, [contextQuizzes]);
 
   return (
     <main>
-      {/* Hero Section */}
       {/* Hero Section */}
       <section className="border-b-4 border-foreground bg-primary text-foreground overflow-hidden relative">
         {/* Decorative Background Element */}
